@@ -52,3 +52,39 @@ footer {
   background: var(--muted);
   color: white;
 }
+
+body.blog-page {
+  background-color: #EAE0D5; /* light Japandi background */
+  font-family: 'Segoe UI', sans-serif;
+  padding: 2rem;
+  color: #3D3D3D;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #494D43;
+  font-size: 0.9rem;
+}
+
+.blog-post {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.blog-post h2 {
+  margin-top: 0;
+}
+
+.blog-post .date {
+  font-size: 0.8rem;
+  color: #736F6E;
+  margin-bottom: 1rem;
+}
