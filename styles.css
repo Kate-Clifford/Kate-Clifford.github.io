@@ -268,3 +268,25 @@ border-left: 5px solid #B5A898;
   background-color: #B5A898;
 }
 
+.cv-sidebar-btn {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left;
+  writing-mode: vertical-rl;
+  background-color: #D2B49F;
+  color: #3D3D3D;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  text-decoration: none;
+  border-radius: 0 0.5rem 0.5rem 0;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  z-index: 1000;
+}
+
+.cv-sidebar-btn:hover {
+  background-color: #B5A898;
+  color: #FFFFFF;
+}
