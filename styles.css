@@ -16,6 +16,15 @@ body {
 }
 
 header {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Keeps it above other elements */
+  background-color: #EAE0D5; /* Match your site’s background */
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+}
+
+header {
   background: var(--accent);
   padding: 1rem;
   display: flex;
