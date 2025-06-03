@@ -243,7 +243,16 @@ border-left: 5px solid #B5A898;
   text-decoration: none;
   font-weight: bold;
   display: inline-block;
-  transition: background-color 0.3s ease;
+  border: none;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1rem;
+}
+
+.download-button:hover {
+  background-color: #B5A898;
+  transform: translateY(-2px);
+  cursor: pointer;
 }
 
 .download-button:hover {
