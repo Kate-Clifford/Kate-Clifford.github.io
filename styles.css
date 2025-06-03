@@ -124,6 +124,49 @@ nav a {
   height: auto;
   object-fit: contain;
 }
+.job {
+  background-color: #EAE0D5; /* Light neutral background */
+  border: 1px solid #D2B49F; /* Soft accent border */
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.job h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+  color: #3D3D3D;
+}
+
+.company {
+  font-weight: normal;
+  color: #736F6E;
+}
+
+.date {
+  font-style: italic;
+  color: #B5A898;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.job ul {
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+.job li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: #494D43;
+}
 
 
 
