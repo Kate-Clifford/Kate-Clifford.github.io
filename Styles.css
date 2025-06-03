@@ -117,12 +117,12 @@ nav a {
 .image-header {
   background-color: #EAE0D5;
   text-align: center;
-  padding: 2rem 0;
+  padding: 1.5rem 0;
   border-bottom: 2px solid #D2B49F;
 }
 
 .header-image {
-  max-height: 200px;  /* Try 200–300px depending on vibe */
+  max-height: 250px;
   width: auto;
   height: auto;
   display: block;
