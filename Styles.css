@@ -122,7 +122,11 @@ nav a {
 }
 
 .header-image {
-  max-width: 90%;
+  max-height: 200px;  /* Try 200–300px depending on vibe */
+  width: auto;
   height: auto;
+  display: block;
+  margin: 0 auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
