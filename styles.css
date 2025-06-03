@@ -181,3 +181,22 @@ border-left: 5px solid #B5A898;
   text-align: center;
 }
 
+.skills {
+  margin-bottom: 2rem;
+}
+
+.skill-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.skill-badges span {
+  background-color: #D2B49F;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+}
+
