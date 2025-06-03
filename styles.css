@@ -270,7 +270,7 @@ border-left: 5px solid #B5A898;
 
 .cv-sidebar-btn {
   position: fixed;
-  left: 0;
+  left: 0.5rem; /* was 0, this nudges it slightly in from the edge */
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
   transform-origin: left;
