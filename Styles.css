@@ -124,6 +124,10 @@ nav a {
 }
 
 .header-image {
+  max-height: 250px !important;
+}
+
+.header-image {
   max-height: 250px;
   width: auto;
   height: auto;
