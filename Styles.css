@@ -111,20 +111,17 @@ nav a {
 
 .smaller-image {
   max-height: 250px;
-  height: auto;
   width: auto;
+  height: auto;
   object-fit: contain;
 }
+
 
 .image-header {
   background-color: #EAE0D5;
   text-align: center;
   padding: 1.5rem 0;
   border-bottom: 2px solid #D2B49F;
-}
-
-.header-image {
-  max-height: 250px !important;
 }
 
 .header-image {
@@ -135,5 +132,6 @@ nav a {
   margin: 0 auto;
   object-fit: contain;
 }
+
 
 
