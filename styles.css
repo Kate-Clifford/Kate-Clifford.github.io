@@ -235,3 +235,18 @@ border-left: 5px solid #B5A898;
   opacity: 0.8;
 }
 
+.download-button {
+  background-color: #D2B49F;
+  color: #3D3D3D;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #B5A898;
+}
+
