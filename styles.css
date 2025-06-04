@@ -128,11 +128,12 @@ nav a {
 .header-image {
   display: block;
   margin: 0 auto;
-  max-height: 250px;
+  max-height: 225px; /* reduced from 250px by 10% */
   width: auto;
   height: auto;
   object-fit: contain;
 }
+
 .job {
   background-color: #EAE0D5; /* Light neutral background */
   border: 1px solid #D2B49F; /* Soft accent border */
