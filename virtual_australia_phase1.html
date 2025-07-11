@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Virtual Australia Fitness Tracker - Phase 1</title>
@@ -18,6 +24,9 @@
 </style>
 </head>
 <body>
+
+  <div id="map" style="height: 400px; width: 100%;"></div>
+  
   <h1>Virtual Australia Fitness Tracker</h1>
   <form id="entryForm">
     <label for="user">User</label>
