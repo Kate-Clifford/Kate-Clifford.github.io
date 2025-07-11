@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Virtual Australia Fitness Tracker - Phase 1</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 700px; margin: 1rem auto; padding: 1rem; background: #f7f7f7; }
+  h1 { text-align: center; }
+  form { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 0 5px #ccc; margin-bottom: 1rem; }
+  label { display: block; margin: 0.5rem 0 0.2rem; }
+  input, select { width: 100%; padding: 0.4rem; font-size: 1rem; }
+  button { margin-top: 1rem; padding: 0.6rem 1.2rem; font-size: 1rem; cursor: pointer; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: center; }
+  th { background: #eee; }
+  .totals { font-weight: bold; }
+</style>
+</head>
+<body>
+  <h1>Virtual Australia Fitness Tracker</h1>
+  <form id="entryForm">
+    <label for="user">User</label>
+    <select id="user" required>
+      <option value="" disabled selected>Select user</option>
+      <option value="Kate">Kate</option>
+      <option value="Shell">Shell</option>
+    </select>
+
+    <label for="date">Date</label>
+    <input type="date" id="date" required />
+
+    <label for="steps">Steps Walked</label>
+    <input type="number" id="steps" min="0" step="1" value="0" required />
+
+    <label for="cycle">Cycling KM (stationary bike)</label>
+    <input type="number" id="cycle" min="0" step="0.1" value="0" required />
+
+    <button type="submit">Add Entry</button>
+  </form>
+
+  <h2>Progress</h2>
+  <table id="entriesTable" aria-live="polite">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>User</th>
+        <th>Steps</th>
+        <th>Walk KM</th>
+        <th>Cycle KM</th>
+        <th>Total KM</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr class="totals">
+        <td colspan="3">Total for Kate</td>
+        <td id="totalWalkKate">0</td>
+        <td id="totalCycleKate">0</td>
+        <td id="totalKate">0</td>
+      </tr>
+      <tr class="totals">
+        <td colspan="3">Total for Shell</td>
+        <td id="totalWalkShell">0</td>
+        <td id="totalCycleShell">0</td>
+        <td id="totalShell">0</td>
+      </tr>
+      <tr class="totals">
+        <td colspan="3">Household Total</td>
+        <td id="totalWalkHousehold">0</td>
+        <td id="totalCycleHousehold">0</td>
+        <td id="totalHousehold">0</td>
+      </tr>
+    </tfoot>
+  </table>
+
+<script>
+  // Steps to KM conversion rate
+  const STEPS_PER_KM = 1300;
+
+  // Retrieve entries from LocalStorage or start with empty array
+  let entries = JSON.parse(localStorage.getItem('fitnessEntries')) || [];
+
+  // DOM elements
+  const form = document.getElementById('entryForm');
+  const tbody = document.querySelector('#entriesTable tbody');
+  const totalWalkKateEl = document.getElementById('totalWalkKate');
+  const totalCycleKateEl = document.getElementById('totalCycleKate');
+  const totalKateEl = document.getElementById('totalKate');
+  const totalWalkShellEl = document.getElementById('totalWalkShell');
+  const totalCycleShellEl = document.getElementById('totalCycleShell');
+  const totalShellEl = document.getElementById('totalShell');
+  const totalWalkHouseholdEl = document.getElementById('totalWalkHousehold');
+  const totalCycleHouseholdEl = document.getElementById('totalCycleHousehold');
+  const totalHouseholdEl = document.getElementById('totalHousehold');
+
+  // Render entries in table
+  function renderEntries() {
+    tbody.innerHTML = '';
+    let totals = {
+      Kate: { walk: 0, cycle: 0, total: 0 },
+      Shell: { walk: 0, cycle: 0, total: 0 }
+    };
+
+    // Sort entries by date ascending
+    entries.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    for (const entry of entries) {
+      const walkKm = entry.steps / STEPS_PER_KM;
+      const totalKm = walkKm + entry.cycle;
+
+      totals[entry.user].walk += walkKm;
+      totals[entry.user].cycle += entry.cycle;
+      totals[entry.user].total += totalKm;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${entry.date}</td>
+        <td>${entry.user}</td>
+        <td>${entry.steps}</td>
+        <td>${walkKm.toFixed(2)}</td>
+        <td>${entry.cycle.toFixed(2)}</td>
+        <td>${totalKm.toFixed(2)}</td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    // Update totals in footer
+    totalWalkKateEl.textContent = totals.Kate.walk.toFixed(2);
+    totalCycleKateEl.textContent = totals.Kate.cycle.toFixed(2);
+    totalKateEl.textContent = totals.Kate.total.toFixed(2);
+
+    totalWalkShellEl.textContent = totals.Shell.walk.toFixed(2);
+    totalCycleShellEl.textContent = totals.Shell.cycle.toFixed(2);
+    totalShellEl.textContent = totals.Shell.total.toFixed(2);
+
+    const householdWalk = totals.Kate.walk + totals.Shell.walk;
+    const householdCycle = totals.Kate.cycle + totals.Shell.cycle;
+    const householdTotal = totals.Kate.total + totals.Shell.total;
+
+    totalWalkHouseholdEl.textContent = householdWalk.toFixed(2);
+    totalCycleHouseholdEl.textContent = householdCycle.toFixed(2);
+    totalHouseholdEl.textContent = householdTotal.toFixed(2);
+  }
+
+  // Save entries to LocalStorage
+  function saveEntries() {
+    localStorage.setItem('fitnessEntries', JSON.stringify(entries));
+  }
+
+  // Handle form submit
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const user = form.user.value;
+    const date = form.date.value;
+    const steps = Number(form.steps.value);
+    const cycle = Number(form.cycle.value);
+
+    if (!user || !date || steps < 0 || cycle < 0) {
+      alert('Please fill out the form correctly.');
+      return;
+    }
+
+    // Prevent duplicate entries for same user and date
+    const duplicate = entries.find(
+      (entry) => entry.user === user && entry.date === date
+    );
+    if (duplicate) {
+      if (!confirm('An entry for this user and date exists. Overwrite?')) {
+        return;
+      }
+      entries = entries.filter(
+        (entry) => !(entry.user === user && entry.date === date)
+      );
+    }
+
+    entries.push({ user, date, steps, cycle });
+    saveEntries();
+    renderEntries();
+    form.reset();
+  });
+
+  // Initial render on page load
+  renderEntries();
+</script>
+</body>
+</html>
