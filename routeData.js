@@ -1,4 +1,7 @@
 // routeData.js
+console.log("Entries loaded:", entries);
+const totalProgress = entries.reduce((sum, e) => sum + (e.steps / STEPS_PER_KM + e.cycle), 0);
+console.log("Total progress (km):", totalProgress);
 const coastalRoute = [
   { town: "Cow Up a Tree, Docklands", km: 0, lat: -37.81695, lon: 144.94533, funFact: "Iconic art installation in Melbourne's Docklands." },
   { town: "Lakes Entrance VIC", km: 320, lat: -37.8732, lon: 147.9985, funFact: "Gateway to the Gippsland Lakes, famous for boating." },
