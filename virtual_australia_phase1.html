@@ -1,108 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virtual Australia Fitness Tracker - Phase 1</title>
   <!-- Leaflet CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Virtual Australia Fitness Tracker - Phase 1</title>
-<style>
-  body { font-family: Arial, sans-serif; max-width: 700px; margin: 1rem auto; padding: 1rem; background: #f7f7f7; }
-  h1 { text-align: center; }
-  form { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 0 5px #ccc; margin-bottom: 1rem; }
-  label { display: block; margin: 0.5rem 0 0.2rem; }
-  input, select { width: 100%; padding: 0.4rem; font-size: 1rem; }
-  button { margin-top: 1rem; padding: 0.6rem 1.2rem; font-size: 1rem; cursor: pointer; }
-  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-  th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: center; }
-  th { background: #eee; }
-  .totals { font-weight: bold; }
-</style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 1rem auto; padding: 1rem; background: #f7f7f7; }
+    h1 { text-align: center; }
+    form { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 0 5px #ccc; margin-bottom: 1rem; }
+    label { display: block; margin: 0.5rem 0 0.2rem; }
+    input, select { width: 100%; padding: 0.4rem; font-size: 1rem; }
+    button { margin-top: 1rem; padding: 0.6rem 1.2rem; font-size: 1rem; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.4rem 0.6rem; text-align: center; }
+    th { background: #eee; }
+    .totals { font-weight: bold; }
+  </style>
 </head>
 <body>
-<div id="map" style="height: 500px;"></div>
-<!-- Leaflet dependencies -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <div id="map" style="height: 500px;"></div>
 
-<!-- Map container -->
-<div id="map" style="height: 500px;"></div>
-
-<script>
-  // Updated route: Melbourne clockwise along the coast
-  const australiaCoastalRoute = [
-    [-37.8136, 144.9631], // Melbourne
-    [-33.8688, 151.2093], // Sydney
-    [-32.9283, 151.7817], // Newcastle
-    [-28.0167, 153.4000], // Gold Coast
-    [-27.4698, 153.0251], // Brisbane
-    [-23.3783, 150.5050], // Rockhampton
-    [-19.2589, 146.8169], // Townsville
-    [-16.9186, 145.7781], // Cairns
-    [-12.4634, 130.8456], // Darwin
-    [-17.9618, 122.2364], // Broome
-    [-20.3104, 118.6097], // Port Hedland
-    [-21.9333, 114.1260], // Exmouth
-    [-28.7742, 114.6089], // Geraldton
-    [-31.9505, 115.8605], // Perth
-    [-33.3271, 115.6414], // Bunbury
-    [-35.0228, 117.8814], // Albany
-    [-33.8611, 121.8910], // Esperance
-    [-32.1267, 133.7078], // Ceduna
-    [-34.7203, 135.8589], // Port Lincoln
-    [-34.9285, 138.6007], // Adelaide
-    [-37.8303, 140.7820], // Mount Gambier
-    [-37.8136, 144.9631]  // Back to Melbourne
-  ];
-
-  const totalRouteLength = 15000; // km – rough estimate
-  let progressKm = parseFloat(localStorage.getItem('progressKm')) || 0;
-
-  const map = L.map('map').setView([-25.2744, 133.7751], 4);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
-
-  const routeLine = L.polyline(australiaCoastalRoute, { color: 'blue' }).addTo(map);
-
-  // Basic linear interpolation between route points
-  function interpolatePoint(route, progressKm, totalKm) {
-    const totalPoints = route.length;
-    const progressRatio = progressKm / totalKm;
-    const segment = Math.min(Math.floor(progressRatio * (totalPoints - 1)), totalPoints - 2);
-
-    const start = route[segment];
-    const end = route[segment + 1];
-    const segProgress = (progressRatio * (totalPoints - 1)) - segment;
-
-    const lat = start[0] + (end[0] - start[0]) * segProgress;
-    const lng = start[1] + (end[1] - start[1]) * segProgress;
-
-    return [lat, lng];
-  }
-
-  const progressLatLng = interpolatePoint(australiaCoastalRoute, progressKm, totalRouteLength);
-  const progressMarker = L.marker(progressLatLng).addTo(map)
-    .bindPopup(`Progress: ${progressKm.toFixed(1)} km`).openPopup();
-
-  // Optional progress test button
-  const button = document.createElement('button');
-  button.textContent = "Add 100 km";
-  button.onclick = () => {
-    progressKm += 100;
-    localStorage.setItem('progressKm', progressKm);
-    location.reload();
-  };
-  document.body.appendChild(button);
-</script>
-
-  
-    <h1>Virtual Australia Fitness Tracker</h1>
+  <h1>Virtual Australia Fitness Tracker</h1>
   <form id="entryForm">
     <label for="user">User</label>
     <select id="user" required>
@@ -158,116 +80,120 @@
     </tfoot>
   </table>
 
-<script>
-  // Steps to KM conversion rate
-  const STEPS_PER_KM = 1300;
+  <script>
+    const STEPS_PER_KM = 1300;
+    let entries = JSON.parse(localStorage.getItem('fitnessEntries')) || [];
+    const form = document.getElementById('entryForm');
+    const tbody = document.querySelector('#entriesTable tbody');
 
-  // Retrieve entries from LocalStorage or start with empty array
-  let entries = JSON.parse(localStorage.getItem('fitnessEntries')) || [];
-
-  // DOM elements
-  const form = document.getElementById('entryForm');
-  const tbody = document.querySelector('#entriesTable tbody');
-  const totalWalkKateEl = document.getElementById('totalWalkKate');
-  const totalCycleKateEl = document.getElementById('totalCycleKate');
-  const totalKateEl = document.getElementById('totalKate');
-  const totalWalkShellEl = document.getElementById('totalWalkShell');
-  const totalCycleShellEl = document.getElementById('totalCycleShell');
-  const totalShellEl = document.getElementById('totalShell');
-  const totalWalkHouseholdEl = document.getElementById('totalWalkHousehold');
-  const totalCycleHouseholdEl = document.getElementById('totalCycleHousehold');
-  const totalHouseholdEl = document.getElementById('totalHousehold');
-
-  // Render entries in table
-  function renderEntries() {
-    tbody.innerHTML = '';
-    let totals = {
-      Kate: { walk: 0, cycle: 0, total: 0 },
-      Shell: { walk: 0, cycle: 0, total: 0 }
+    const totalsEls = {
+      Kate: {
+        walk: document.getElementById('totalWalkKate'),
+        cycle: document.getElementById('totalCycleKate'),
+        total: document.getElementById('totalKate')
+      },
+      Shell: {
+        walk: document.getElementById('totalWalkShell'),
+        cycle: document.getElementById('totalCycleShell'),
+        total: document.getElementById('totalShell')
+      },
+      Household: {
+        walk: document.getElementById('totalWalkHousehold'),
+        cycle: document.getElementById('totalCycleHousehold'),
+        total: document.getElementById('totalHousehold')
+      }
     };
 
-    // Sort entries by date ascending
-    entries.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    for (const entry of entries) {
-      const walkKm = entry.steps / STEPS_PER_KM;
-      const totalKm = walkKm + entry.cycle;
-
-      totals[entry.user].walk += walkKm;
-      totals[entry.user].cycle += entry.cycle;
-      totals[entry.user].total += totalKm;
-
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${entry.date}</td>
-        <td>${entry.user}</td>
-        <td>${entry.steps}</td>
-        <td>${walkKm.toFixed(2)}</td>
-        <td>${entry.cycle.toFixed(2)}</td>
-        <td>${totalKm.toFixed(2)}</td>
-      `;
-      tbody.appendChild(row);
-    }
-
-    // Update totals in footer
-    totalWalkKateEl.textContent = totals.Kate.walk.toFixed(2);
-    totalCycleKateEl.textContent = totals.Kate.cycle.toFixed(2);
-    totalKateEl.textContent = totals.Kate.total.toFixed(2);
-
-    totalWalkShellEl.textContent = totals.Shell.walk.toFixed(2);
-    totalCycleShellEl.textContent = totals.Shell.cycle.toFixed(2);
-    totalShellEl.textContent = totals.Shell.total.toFixed(2);
-
-    const householdWalk = totals.Kate.walk + totals.Shell.walk;
-    const householdCycle = totals.Kate.cycle + totals.Shell.cycle;
-    const householdTotal = totals.Kate.total + totals.Shell.total;
-
-    totalWalkHouseholdEl.textContent = householdWalk.toFixed(2);
-    totalCycleHouseholdEl.textContent = householdCycle.toFixed(2);
-    totalHouseholdEl.textContent = householdTotal.toFixed(2);
-  }
-
-  // Save entries to LocalStorage
-  function saveEntries() {
-    localStorage.setItem('fitnessEntries', JSON.stringify(entries));
-  }
-
-  // Handle form submit
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const user = form.user.value;
-    const date = form.date.value;
-    const steps = Number(form.steps.value);
-    const cycle = Number(form.cycle.value);
-
-    if (!user || !date || steps < 0 || cycle < 0) {
-      alert('Please fill out the form correctly.');
-      return;
-    }
-
-    // Prevent duplicate entries for same user and date
-    const duplicate = entries.find(
-      (entry) => entry.user === user && entry.date === date
-    );
-    if (duplicate) {
-      if (!confirm('An entry for this user and date exists. Overwrite?')) {
-        return;
+    function renderEntries() {
+      tbody.innerHTML = '';
+      const totals = { Kate: { walk: 0, cycle: 0, total: 0 }, Shell: { walk: 0, cycle: 0, total: 0 } };
+      entries.sort((a, b) => new Date(a.date) - new Date(b.date));
+      for (const entry of entries) {
+        const walkKm = entry.steps / STEPS_PER_KM;
+        const totalKm = walkKm + entry.cycle;
+        totals[entry.user].walk += walkKm;
+        totals[entry.user].cycle += entry.cycle;
+        totals[entry.user].total += totalKm;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${entry.date}</td>
+          <td>${entry.user}</td>
+          <td>${entry.steps}</td>
+          <td>${walkKm.toFixed(2)}</td>
+          <td>${entry.cycle.toFixed(2)}</td>
+          <td>${totalKm.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
       }
-      entries = entries.filter(
-        (entry) => !(entry.user === user && entry.date === date)
-      );
+      for (const user of ['Kate', 'Shell']) {
+        totalsEls[user].walk.textContent = totals[user].walk.toFixed(2);
+        totalsEls[user].cycle.textContent = totals[user].cycle.toFixed(2);
+        totalsEls[user].total.textContent = totals[user].total.toFixed(2);
+      }
+      const householdWalk = totals.Kate.walk + totals.Shell.walk;
+      const householdCycle = totals.Kate.cycle + totals.Shell.cycle;
+      const householdTotal = totals.Kate.total + totals.Shell.total;
+      totalsEls.Household.walk.textContent = householdWalk.toFixed(2);
+      totalsEls.Household.cycle.textContent = householdCycle.toFixed(2);
+      totalsEls.Household.total.textContent = householdTotal.toFixed(2);
     }
 
-    entries.push({ user, date, steps, cycle });
-    saveEntries();
-    renderEntries();
-    form.reset();
-  });
+    function saveEntries() {
+      localStorage.setItem('fitnessEntries', JSON.stringify(entries));
+    }
 
-  // Initial render on page load
-  renderEntries();
-</script>
-  <script type="module" src="app.js"></script>
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = form.user.value;
+      const date = form.date.value;
+      const steps = Number(form.steps.value);
+      const cycle = Number(form.cycle.value);
+      if (!user || !date || steps < 0 || cycle < 0) return alert('Please fill out the form correctly.');
+      const existing = entries.find(e => e.user === user && e.date === date);
+      if (existing && !confirm('Overwrite existing entry?')) return;
+      entries = entries.filter(e => !(e.user === user && e.date === date));
+      entries.push({ user, date, steps, cycle });
+      saveEntries();
+      renderEntries();
+      form.reset();
+    });
+
+    renderEntries();
+
+    const australiaCoastalRoute = [
+      [-37.8136, 144.9631], [-33.8688, 151.2093], [-32.9283, 151.7817],
+      [-28.0167, 153.4000], [-27.4698, 153.0251], [-23.3783, 150.5050],
+      [-19.2589, 146.8169], [-16.9186, 145.7781], [-12.4634, 130.8456],
+      [-17.9618, 122.2364], [-20.3104, 118.6097], [-21.9333, 114.1260],
+      [-28.7742, 114.6089], [-31.9505, 115.8605], [-33.3271, 115.6414],
+      [-35.0228, 117.8814], [-33.8611, 121.8910], [-32.1267, 133.7078],
+      [-34.7203, 135.8589], [-34.9285, 138.6007], [-37.8303, 140.7820],
+      [-37.8136, 144.9631]
+    ];
+
+    const totalRouteLength = 15000;
+    const totalProgress = entries.reduce((sum, e) => sum + (e.steps / STEPS_PER_KM + e.cycle), 0);
+    const map = L.map('map').setView([-25.2744, 133.7751], 4);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    L.polyline(australiaCoastalRoute, { color: 'blue' }).addTo(map);
+
+    function interpolatePoint(route, progressKm, totalKm) {
+      const totalPoints = route.length;
+      const ratio = progressKm / totalKm;
+      const segment = Math.min(Math.floor(ratio * (totalPoints - 1)), totalPoints - 2);
+      const start = route[segment], end = route[segment + 1];
+      const segRatio = (ratio * (totalPoints - 1)) - segment;
+      return [
+        start[0] + (end[0] - start[0]) * segRatio,
+        start[1] + (end[1] - start[1]) * segRatio
+      ];
+    }
+
+    const markerPos = interpolatePoint(australiaCoastalRoute, totalProgress, totalRouteLength);
+    L.marker(markerPos).addTo(map)
+      .bindPopup(`Total Distance: ${totalProgress.toFixed(1)} km`).openPopup();
+  </script>
 </body>
 </html>
