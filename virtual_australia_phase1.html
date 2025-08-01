@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <!-- Leaflet CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 <!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Virtual Australia Fitness Tracker - Phase 1</title>
@@ -24,10 +24,85 @@
 </style>
 </head>
 <body>
+<div id="map" style="height: 500px;"></div>
+<!-- Leaflet dependencies -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-  <div id="map" style="height: 400px; width: 100%;"></div>
+<!-- Map container -->
+<div id="map" style="height: 500px;"></div>
+
+<script>
+  // Updated route: Melbourne clockwise along the coast
+  const australiaCoastalRoute = [
+    [-37.8136, 144.9631], // Melbourne
+    [-33.8688, 151.2093], // Sydney
+    [-32.9283, 151.7817], // Newcastle
+    [-28.0167, 153.4000], // Gold Coast
+    [-27.4698, 153.0251], // Brisbane
+    [-23.3783, 150.5050], // Rockhampton
+    [-19.2589, 146.8169], // Townsville
+    [-16.9186, 145.7781], // Cairns
+    [-12.4634, 130.8456], // Darwin
+    [-17.9618, 122.2364], // Broome
+    [-20.3104, 118.6097], // Port Hedland
+    [-21.9333, 114.1260], // Exmouth
+    [-28.7742, 114.6089], // Geraldton
+    [-31.9505, 115.8605], // Perth
+    [-33.3271, 115.6414], // Bunbury
+    [-35.0228, 117.8814], // Albany
+    [-33.8611, 121.8910], // Esperance
+    [-32.1267, 133.7078], // Ceduna
+    [-34.7203, 135.8589], // Port Lincoln
+    [-34.9285, 138.6007], // Adelaide
+    [-37.8303, 140.7820], // Mount Gambier
+    [-37.8136, 144.9631]  // Back to Melbourne
+  ];
+
+  const totalRouteLength = 15000; // km – rough estimate
+  let progressKm = parseFloat(localStorage.getItem('progressKm')) || 0;
+
+  const map = L.map('map').setView([-25.2744, 133.7751], 4);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const routeLine = L.polyline(australiaCoastalRoute, { color: 'blue' }).addTo(map);
+
+  // Basic linear interpolation between route points
+  function interpolatePoint(route, progressKm, totalKm) {
+    const totalPoints = route.length;
+    const progressRatio = progressKm / totalKm;
+    const segment = Math.min(Math.floor(progressRatio * (totalPoints - 1)), totalPoints - 2);
+
+    const start = route[segment];
+    const end = route[segment + 1];
+    const segProgress = (progressRatio * (totalPoints - 1)) - segment;
+
+    const lat = start[0] + (end[0] - start[0]) * segProgress;
+    const lng = start[1] + (end[1] - start[1]) * segProgress;
+
+    return [lat, lng];
+  }
+
+  const progressLatLng = interpolatePoint(australiaCoastalRoute, progressKm, totalRouteLength);
+  const progressMarker = L.marker(progressLatLng).addTo(map)
+    .bindPopup(`Progress: ${progressKm.toFixed(1)} km`).openPopup();
+
+  // Optional progress test button
+  const button = document.createElement('button');
+  button.textContent = "Add 100 km";
+  button.onclick = () => {
+    progressKm += 100;
+    localStorage.setItem('progressKm', progressKm);
+    location.reload();
+  };
+  document.body.appendChild(button);
+</script>
+
   
-  <h1>Virtual Australia Fitness Tracker</h1>
+    <h1>Virtual Australia Fitness Tracker</h1>
   <form id="entryForm">
     <label for="user">User</label>
     <select id="user" required>
