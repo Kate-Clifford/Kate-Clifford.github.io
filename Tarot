@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Witch Tarot Journal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5f1eb 0%, #e8ddd4 100%);
+            color: #4a3728;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(139, 125, 107, 0.1);
+            border-radius: 15px;
+            border: 2px solid #c4b5a0;
+        }
+
+        h1 {
+            color: #3d2914;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(61, 41, 20, 0.1);
+        }
+
+        .subtitle {
+            color: #8b7d6b;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: #d4c4b0;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            color: #4a3728;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #c4b5a0;
+            color: #3d2914;
+            box-shadow: 0 2px 8px rgba(61, 41, 20, 0.2);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(196, 181, 160, 0.5);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #d4c4b0;
+            box-shadow: 0 4px 15px rgba(61, 41, 20, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #3d2914;
+        }
+
+        input[type="text"], input[type="date"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d4c4b0;
+            border-radius: 8px;
+            background: #faf8f5;
+            color: #4a3728;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8b7d6b;
+            box-shadow: 0 0 0 3px rgba(139, 125, 107, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .card-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-input-group {
+            position: relative;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #d4c4b0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .suggestion {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .suggestion:hover {
+            background: #f5f1eb;
+        }
+
+        .suggestion:last-child {
+            border-bottom: none;
+        }
+
+        button {
+            background: #8b7d6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #6d5d4d;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(61, 41, 20, 0.2);
+        }
+
+        .add-card-btn {
+            background: #a67c5a;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .reading-entry {
+            background: rgba(244, 240, 236, 0.8);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #8b7d6b;
+            box-shadow: 0 2px 10px rgba(61, 41, 20, 0.1);
+        }
+
+        .reading-date {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #3d2914;
+            margin-bottom: 15px;
+        }
+
+        .cards-display {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .card-display {
+            background: #c4b5a0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #3d2914;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .notes-section {
+            margin-top: 15px;
+        }
+
+        .notes-section h4 {
+            color: #3d2914;
+            margin-bottom: 8px;
+        }
+
+        .notes-section p {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #d4c4b0;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(244, 240, 236, 0.9);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #d4c4b0;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #8b7d6b;
+            display: block;
+        }
+
+        .stat-label {
+            color: #3d2914;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            background: #a67c5a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-wrapper:hover {
+            background: #8b5d3d;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .recent-cards {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .recent-card {
+            background: #8b7d6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .major-arcana {
+            background: #a67c5a !important;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .cards-display {
+                flex-direction: column;
+            }
+            
+            .card-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✦ Nova Witch Tarot Journal ✦</h1>
+            <div class="subtitle">Track your mystical journey through the cards</div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('new-reading')">New Reading</button>
+            <button class="tab" onclick="showTab('readings')">Past Readings</button>
+            <button class="tab" onclick="showTab('trends')">Trends</button>
+            <button class="tab" onclick="showTab('import')">Import Cards</button>
+        </div>
+
+        <div id="new-reading" class="tab-content active">
+            <h2>Record New Reading</h2>
+            <form id="reading-form">
+                <div class="form-group">
+                    <label for="reading-date">Date</label>
+                    <input type="date" id="reading-date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Cards Drawn</label>
+                    <div class="card-inputs" id="card-inputs">
+                        <div class="card-input-group">
+                            <input type="text" class="card-input" placeholder="Type card name..." required>
+                            <div class="suggestions"></div>
+                        </div>
+                        <div class="card-input-group">
+                            <input type="text" class="card-input" placeholder="Type card name..." required>
+                            <div class="suggestions"></div>
+                        </div>
+                        <div class="card-input-group">
+                            <input type="text" class="card-input" placeholder="Type card name..." required>
+                            <div class="suggestions"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="add-card-btn" onclick="addCardInput()">+ Add Another Card</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="life-context">Life Context</label>
+                    <textarea id="life-context" placeholder="What was happening in your life when you drew these cards?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="my-interpretation">My Interpretation</label>
+                    <textarea id="my-interpretation" placeholder="What do you think these cards are telling you?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="ai-interpretation">AI Interpretation</label>
+                    <textarea id="ai-interpretation" placeholder="What did Claude or another AI say about this reading?"></textarea>
+                </div>
+
+                <button type="submit">Save Reading</button>
+            </form>
+        </div>
+
+        <div id="readings" class="tab-content">
+            <h2>Past Readings</h2>
+            <div id="readings-list"></div>
+        </div>
+
+        <div id="trends" class="tab-content">
+            <h2>Trends & Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="total-readings">0</span>
+                    <div class="stat-label">Total Readings</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="major-arcana-count">0</span>
+                    <div class="stat-label">Major Arcana Drawn</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="current-streak">0</span>
+                    <div class="stat-label">Current Major Arcana Streak</div>
+                </div>
+            </div>
+            <div class="stat-card" style="margin-top: 20px;">
+                <h3>Most Recently Drawn Cards</h3>
+                <div id="recent-cards" class="recent-cards"></div>
+            </div>
+        </div>
+
+        <div id="import" class="tab-content">
+            <h2>Import Card Database</h2>
+            <p>Upload your CSV file with columns: Title, Suit, Themes, Description, In a reading</p>
+            <div class="file-input-wrapper">
+                <input type="file" id="csv-file" accept=".csv" onchange="importCardDatabase()">
+                Choose CSV File
+            </div>
+            <div id="import-status" style="margin-top: 20px;"></div>
+            
+            <h3 style="margin-top: 30px;">Export Data</h3>
+            <button onclick="exportReadings()">Export All Readings</button>
+            <button onclick="exportCards()">Export Card Database</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let cardDatabase = [];
+        let readings = [];
+
+        // Initialize with sample data
+        const sampleReadings = [
+            {
+                date: '2025-08-03',
+                cards: ['Death', 'Nine of Swords', 'King of Cups'],
+                lifeContext: 'Expecting a formal job offer today.',
+                myInterpretation: 'Major transformation (Death) causing anxiety (Nine of Swords) but I can handle it with emotional wisdom (King of Cups).',
+                aiInterpretation: 'You\'re in the midst of a major transformation that\'s understandably causing anxiety, but the King of Cups suggests approaching this change with emotional maturity and compassion.'
+            },
+            {
+                date: '2025-08-04',
+                cards: ['Ace of Swords', 'Five of Swords', 'Judgement'],
+                lifeContext: 'Got the job offer and got a call from another company asking for a second round interview. Had to decide whether to hold off or commit to the exciting role with a commute.',
+                myInterpretation: 'Clear decision moment (Ace of Swords) with conflict about choices (Five of Swords) but ultimately transformative (Judgement).',
+                aiInterpretation: 'You\'re experiencing a major breakthrough in clarity about a situation involving difficult decisions, ultimately leading to a profound spiritual awakening and life renewal.'
+            }
+        ];
+
+        // Initialize the app
+        function init() {
+            // Set today's date
+            document.getElementById('reading-date').value = new Date().toISOString().split('T')[0];
+            
+            // Load sample readings
+            readings = [...sampleReadings];
+            
+            // Setup event listeners
+            setupCardInputs();
+            
+            // Display initial data
+            displayReadings();
+            updateTrends();
+            
+            // Setup form submission
+            document.getElementById('reading-form').addEventListener('submit', handleFormSubmit);
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Update displays when switching tabs
+            if (tabName === 'readings') {
+                displayReadings();
+            } else if (tabName === 'trends') {
+                updateTrends();
+            }
+        }
+
+        function setupCardInputs() {
+            const cardInputs = document.querySelectorAll('.card-input');
+            cardInputs.forEach(input => {
+                setupSingleCardInput(input);
+            });
+        }
+
+        function setupSingleCardInput(input) {
+            const suggestionsDiv = input.parentElement.querySelector('.suggestions');
+            
+            input.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                if (query.length < 2) {
+                    suggestionsDiv.style.display = 'none';
+                    return;
+                }
+                
+                const matches = cardDatabase.filter(card => 
+                    card.title.toLowerCase().includes(query)
+                ).slice(0, 5);
+                
+                if (matches.length > 0) {
+                    suggestionsDiv.innerHTML = matches.map(card => 
+                        `<div class="suggestion" onclick="selectCard('${card.title}', this)">${card.title}</div>`
+                    ).join('');
+                    suggestionsDiv.style.display = 'block';
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                setTimeout(() => {
+                    suggestionsDiv.style.display = 'none';
+                }, 200);
+            });
+        }
+
+        function selectCard(cardName, element) {
+            const input = element.parentElement.parentElement.querySelector('.card-input');
+            input.value = cardName;
+            element.parentElement.style.display = 'none';
+        }
+
+        function addCardInput() {
+            const cardInputsContainer = document.getElementById('card-inputs');
+            const newCardInput = document.createElement('div');
+            newCardInput.className = 'card-input-group';
+            newCardInput.innerHTML = `
+                <input type="text" class="card-input" placeholder="Type card name...">
+                <div class="suggestions"></div>
+            `;
+            cardInputsContainer.appendChild(newCardInput);
+            setupSingleCardInput(newCardInput.querySelector('.card-input'));
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById('reading-date').value;
+            const cardInputs = document.querySelectorAll('.card-input');
+            const cards = Array.from(cardInputs)
+                .map(input => input.value.trim())
+                .filter(card => card !== '');
+                
+            const lifeContext = document.getElementById('life-context').value;
+            const myInterpretation = document.getElementById('my-interpretation').value;
+            const aiInterpretation = document.getElementById('ai-interpretation').value;
+            
+            if (cards.length === 0) {
+                alert('Please enter at least one card');
+                return;
+            }
+            
+            const reading = {
+                date,
+                cards,
+                lifeContext,
+                myInterpretation,
+                aiInterpretation
+            };
+            
+            readings.unshift(reading); // Add to beginning
+            
+            // Reset form
+            document.getElementById('reading-form').reset();
+            document.getElementById('reading-date').value = new Date().toISOString().split('T')[0];
+            
+            // Reset card inputs to 3
+            const cardInputsContainer = document.getElementById('card-inputs');
+            cardInputsContainer.innerHTML = `
+                <div class="card-input-group">
+                    <input type="text" class="card-input" placeholder="Type card name..." required>
+                    <div class="suggestions"></div>
+                </div>
+                <div class="card-input-group">
+                    <input type="text" class="card-input" placeholder="Type card name..." required>
+                    <div class="suggestions"></div>
+                </div>
+                <div class="card-input-group">
+                    <input type="text" class="card-input" placeholder="Type card name..." required>
+                    <div class="suggestions"></div>
+                </div>
+            `;
+            setupCardInputs();
+            
+            alert('Reading saved successfully!');
+            updateTrends();
+        }
+
+        function displayReadings() {
+            const readingsList = document.getElementById('readings-list');
+            
+            if (readings.length === 0) {
+                readingsList.innerHTML = '<p>No readings recorded yet.</p>';
+                return;
+            }
+            
+            readingsList.innerHTML = readings.map(reading => `
+                <div class="reading-entry">
+                    <div class="reading-date">${formatDate(reading.date)}</div>
+                    <div class="cards-display">
+                        ${reading.cards.map(card => 
+                            `<div class="card-display ${isMajorArcana(card) ? 'major-arcana' : ''}">${card}</div>`
+                        ).join('')}
+                    </div>
+                    ${reading.lifeContext ? `
+                        <div class="notes-section">
+                            <h4>Life Context:</h4>
+                            <p>${reading.lifeContext}</p>
+                        </div>
+                    ` : ''}
+                    ${reading.myInterpretation ? `
+                        <div class="notes-section">
+                            <h4>My Interpretation:</h4>
+                            <p>${reading.myInterpretation}</p>
+                        </div>
+                    ` : ''}
+                    ${reading.aiInterpretation ? `
+                        <div class="notes-section">
+                            <h4>AI Interpretation:</h4>
+                            <p>${reading.aiInterpretation}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function updateTrends() {
+            document.getElementById('total-readings').textContent = readings.length;
+            
+            // Count major arcana
+            let majorArcanaCount = 0;
+            let currentStreak = 0;
+            
+            readings.forEach((reading, index) => {
+                const hasMajorArcana = reading.cards.some(card => isMajorArcana(card));
+                if (hasMajorArcana) {
+                    majorArcanaCount++;
+                    if (index < getCurrentStreakLength()) {
+                        currentStreak++;
+                    }
+                }
+            });
+            
+            document.getElementById('major-arcana-count').textContent = majorArcanaCount;
+            document.getElementById('current-streak').textContent = getCurrentStreakLength();
+            
+            // Recent cards
+            const recentCards = [];
+            readings.slice(0, 5).forEach(reading => {
+                recentCards.push(...reading.cards);
+            });
+            
+            const uniqueRecentCards = [...new Set(recentCards)];
+            document.getElementById('recent-cards').innerHTML = uniqueRecentCards.map(card =>
+                `<div class="recent-card ${isMajorArcana(card) ? 'major-arcana' : ''}">${card}</div>`
+            ).join('');
+        }
+
+        function getCurrentStreakLength() {
+            if (readings.length === 0) return 0;
+            
+            let streak = 0;
+            for (let reading of readings) {
+                const hasMajorArcana = reading.cards.some(card => isMajorArcana(card));
+                if (hasMajorArcana) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        }
+
+        function isMajorArcana(cardName) {
+            const majorArcanaCards = [
+                'The Fool', 'The Magician', 'The High Priestess', 'The Empress', 'The Emperor',
+                'The Hierophant', 'The Lovers', 'The Chariot', 'Strength', 'The Hermit',
+                'Wheel of Fortune', 'Justice', 'The Hanged Man', 'Death', 'Temperance',
+                'The Devil', 'The Tower', 'The Star', 'The Moon', 'The Sun', 'Judgement',
+                'The World'
+            ];
+            
+            // Also check without "The" prefix
+            const cardNameLower = cardName.toLowerCase();
+            return majorArcanaCards.some(major => 
+                major.toLowerCase() === cardNameLower || 
+                major.toLowerCase().replace('the ', '') === cardNameLower
+            );
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        function importCardDatabase() {
+            const fileInput = document.getElementById('csv-file');
+            const file = fileInput.files[0];
+            const statusDiv = document.getElementById('import-status');
+            
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csv = e.target.result;
+                    const lines = csv.split('\n');
+                    const headers = lines[0].split(',').map(h => h.trim());
+                    
+                    cardDatabase = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        if (lines[i].trim()) {
+                            const values = lines[i].split(',').map(v => v.trim());
+                            const card = {};
+                            headers.forEach((header, index) => {
+                                card[header.toLowerCase()] = values[index] || '';
+                            });
+                            cardDatabase.push(card);
+                        }
+                    }
+                    
+                    statusDiv.innerHTML = `<p style="color: green;">✓ Successfully imported ${cardDatabase.length} cards!</p>`;
+                } catch (error) {
+                    statusDiv.innerHTML = `<p style="color: red;">Error importing CSV: ${error.message}</p>`;
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportReadings() {
+            const dataStr = JSON.stringify(readings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'tarot_readings.json';
+            link.click();
+        }
+
+        function exportCards() {
+            if (cardDatabase.length === 0) {
+                alert('No card database to export. Import a CSV file first.');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(cardDatabase, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'card_database.json';
+            link.click();
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
